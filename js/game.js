@@ -1,15 +1,22 @@
 const game = {
     canvas : null,
     ctx    : null,
+    board  : null,
+    width: 640,
+    height: 360,
     sprites: {
         background: null,
         cell      : null,
     },
+    //инициализация
+    init() {
+        this.canvas = document.getElementById('mycanvas');
+        this.ctx    = this.canvas.getContext("2d");
+    },
 
     //старт игры
     start() {
-        this.canvas = document.getElementById('mycanvas');
-        this.ctx    = this.canvas.getContext("2d");
+        this.init();
         this.preload((key) => {
             this.run();
         })
@@ -18,7 +25,7 @@ const game = {
     //предзагрузка спрайтов
     preload(callback) {
         let loaded        = 0;
-        const required    = 2;
+        const required    = Object.keys(this.sprites).length;
         const onAssetLoad = () => {
             loaded += 1;
 
@@ -36,9 +43,10 @@ const game = {
 
     //запуск игры
     run() {
+        this.board.create();
         window.requestAnimationFrame(() => {
             game.ctx.drawImage(this.sprites.background, 0, 0);
-            game.ctx.drawImage(this.sprites.cell, 320, 180);
+            this.board.render();
         });
     }
 };
